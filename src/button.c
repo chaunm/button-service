@@ -155,6 +155,7 @@ static void ButtonProcess()
 	}
 	else
 	{
+		buttonState = HIGH;
 		if (buttonCount >= RESET_CYCLE_COUNT)
 		{
 			ButtonPublishEvent("reset");
