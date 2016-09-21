@@ -113,7 +113,7 @@ static void ButtonPublishEvent(char* event)
 	json_object_set(paramsJson, "backoutDuration", blackoutTimeJson);
 	json_object_set(eventJson, "params", paramsJson);
 	char* eventMessage = json_dumps(eventJson, JSON_INDENT(4) | JSON_REAL_PRECISION(4));
-	char* topicName = ActorMakeTopicName(buttonActor->guid, "/:event/info");
+	char* topicName = ActorMakeTopicName(buttonActor->guid, "/:event/button_event");
 	ActorSend(buttonActor, topicName, eventMessage, NULL, FALSE);
 	json_decref(eventJson);
 	json_decref(blackoutTimeJson);
@@ -140,7 +140,13 @@ static void ButtonProcess()
 	static unsigned long buttonCount;
 	if (digitalRead(BUTTON_STATE_PIN) == LOW)
 	{
-		buttonCount++;
+		if (buttonState == HIGH)
+		{
+			buttonState = LOW;
+			buttonCount = 1;
+		}
+		if (buttonCount > 0)
+			buttonCount++;
 		if (buttonCount == RESET_CYCLE_COUNT)
 		{
 			buttonCount = 0;
