@@ -19,8 +19,9 @@
 #include "Actor/actor.h"
 
 
-#define MAIN_LOOP_PERIOD	10000
-#define RESET_CYCLE_COUNT	300
+#define MAIN_LOOP_PERIOD		10000
+#define RESET_CYCLE_COUNT		300
+#define RESET_WIFI_CYCLE_COUNT	100
 
 static PACTOR buttonActor = NULL;
 static BOOL buttonState;
@@ -156,10 +157,10 @@ static void ButtonProcess()
 	else
 	{
 		buttonState = HIGH;
+		if ((buttonCount > RESET_WIFI_CYCLE_COUNT) && (buttonCount < RESET_CYCLE_COUNT))
+			ButtonPublishEvent("reset_wifi");
 		if (buttonCount >= RESET_CYCLE_COUNT)
-		{
 			ButtonPublishEvent("reset");
-		}
 		buttonCount = 0;
 	}
 }
