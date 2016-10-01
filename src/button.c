@@ -109,15 +109,12 @@ static void ButtonPublishEvent(char* event)
 	json_t* eventJson = json_object();
 	json_t* paramsJson = json_object();
 	json_t* contentJson = json_string(event);
-	json_t* blackoutTimeJson = json_integer(timeStamp);
 	json_object_set(paramsJson, "event", contentJson);
-	json_object_set(paramsJson, "backoutDuration", blackoutTimeJson);
 	json_object_set(eventJson, "params", paramsJson);
 	char* eventMessage = json_dumps(eventJson, JSON_INDENT(4) | JSON_REAL_PRECISION(4));
 	char* topicName = ActorMakeTopicName(buttonActor->guid, "/:event/button_event");
 	ActorSend(buttonActor, topicName, eventMessage, NULL, FALSE);
-	json_decref(eventJson);
-	json_decref(blackoutTimeJson);
+	json_decref(contentJson);
 	json_decref(paramsJson);
 	json_decref(eventJson);
 	free(topicName);
