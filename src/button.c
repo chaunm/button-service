@@ -112,8 +112,8 @@ static void ButtonPublishEvent(char* event)
 	json_object_set(paramsJson, "event", contentJson);
 	json_object_set(eventJson, "params", paramsJson);
 	char* eventMessage = json_dumps(eventJson, JSON_INDENT(4) | JSON_REAL_PRECISION(4));
-	char* topicName = ActorMakeTopicName(buttonActor->guid, "/:event/button_event");
-	ActorSend(buttonActor, topicName, eventMessage, NULL, FALSE);
+	char* topicName = ActorMakeTopicName("event/", buttonActor->guid, "/button_event");
+	ActorSend(buttonActor, topicName, eventMessage, NULL, FALSE, topicName);
 	json_decref(contentJson);
 	json_decref(paramsJson);
 	json_decref(eventJson);
